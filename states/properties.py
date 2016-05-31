@@ -13,6 +13,7 @@ def module_path():
         )
     return os.path.dirname(__file__)
 
+
 SEC = 1
 MINUTE = 60
 HOUR = MINUTE * 60
@@ -52,7 +53,6 @@ logging.getLogger("werkzeug").setLevel(logging.WARNING)
 mongo_uri = "mongodb://3030:sederfes100500@ds055525.mongolab.com:55525/reddit_people"
 db_name = "reddit_people"
 
-
 cfs_redis_address = "pub-redis-17140.us-east-1.1.azure.garantiadata.com"
 cfs_redis_port = 17140
 cfs_redis_password = "sederfes100500"
@@ -63,10 +63,9 @@ states_pwd = "YsrSQnuBJGhH"
 
 osmdp = os.environ.get("OPENSHIFT_MONGODB_DB_PORT", "localhost")
 osmdh = os.environ.get("OPENSHIFT_MONGODB_DB_HOST", "")
-print "states data persist: ",osmdh, osmdp
+print "states data persist: ", osmdh, osmdp
 states_conn_url = "mongodb://%s:%s@%s:%s/" % (states_user, states_pwd, osmdh, osmdp)
 states_db_name = "read"
-
 
 WORKED_PIDS_QUERY = os.environ.get("WORKED_PIDS_QUERY", "python2.7")
 

@@ -4,8 +4,8 @@ from multiprocessing.synchronize import Lock
 
 import redis
 
-from states.properties import cfs_redis_address, cfs_redis_port, cfs_redis_password
 from states import get_worked_pids
+from states.properties import cfs_redis_address, cfs_redis_port, cfs_redis_password
 
 log = logging.getLogger("process_director")
 

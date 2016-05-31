@@ -3,9 +3,9 @@ import logging
 
 import pymongo
 
-from states.properties import cfs_redis_address, states_db_name, states_conn_url, mongo_uri, db_name
 from states import StateObject
 from states.processes import ProcessDirector
+from states.properties import cfs_redis_address, states_db_name, states_conn_url, mongo_uri, db_name
 
 log = logging.getLogger("state_persist")
 
@@ -15,6 +15,7 @@ STATE = lambda x: "state_%s" % (x)
 STATE_TASK = "STATE_TASKS"
 
 S_WORK, S_TERMINATED = "work", "terminated"
+
 
 class DBHandler(object):
     def __init__(self, name="?", uri=mongo_uri, db_name=db_name):
@@ -55,4 +56,3 @@ class StatePersist(ProcessDirector, DBHandler):
 
     def get_state_data(self, aspect):
         return list(self.state_data.find({"aspect": aspect}).sort("time", 1))
-
