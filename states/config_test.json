@@ -1,0 +1,6 @@
+{
+
+  "process_director_redis_address": "localhost",
+  "process_director_redis_port": 6379,
+  "process_director_redis_password": "sederfes100500"
+}
