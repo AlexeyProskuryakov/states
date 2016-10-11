@@ -18,6 +18,7 @@ class _ProcessTracker(object):
     def __init__(self, aspect, pd, tick_time):
         event = Event()
         self.tsh = Thread(target=_send_heart_beat, args=(aspect, pd, tick_time, event))
+        self.tsh.setDaemon(True)
         self.tsh.start()
 
         self.stop_event = event
@@ -30,10 +31,10 @@ class _ProcessTracker(object):
 
 def _send_heart_beat(aspect, pd, tick_time, stop_event):
     log.info("start tracking [%s]" % aspect)
+
     while not stop_event.isSet():
         try:
-            print "track %s"%aspect
-            pd._set_timed_state(aspect, tick_time + 1)
+            pd._set_timed_state(aspect, tick_time)
         except Exception as e:
             log.exception(e)
         time.sleep(tick_time)
@@ -56,18 +57,19 @@ class ProcessDirector(object):
         log.info("Process director [%s] inited." % name)
 
     def start_aspect(self, aspect, tick_time=DEFAULT_TICK_TIME):
-        alloc = self.redis.set(PREFIX_ALLOC(aspect), time.time(), ex=tick_time, nx=True)
-        if not alloc:
-            time.sleep(DEFAULT_TICK_TIME * 2)
-            alloc = self.redis.set(PREFIX_ALLOC(aspect), time.time(), ex=tick_time, nx=True)
+        alloc = self.redis.set(PREFIX_ALLOC(aspect), tick_time, ex=tick_time, nx=True)
 
         if alloc:
             result = _ProcessTracker(aspect, self, tick_time)
             return result
 
     def is_aspect_work(self, aspect):
-        alloc = self.redis.get(PREFIX_ALLOC(aspect))
-        return alloc if alloc is not None else False
+        tick_time = self.redis.get(PREFIX_ALLOC(aspect))
+        if tick_time:
+            time.sleep(int(tick_time))
+            tick_time = self.redis.get(PREFIX_ALLOC(aspect))
+
+        return tick_time is not None
 
     def _set_timed_state(self, aspect, ex):
-        self.redis.set(PREFIX_ALLOC(aspect), time.time(), ex=ex)
+        self.redis.set(PREFIX_ALLOC(aspect), ex, ex=ex)
