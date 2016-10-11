@@ -63,9 +63,9 @@ class ProcessDirector(object):
             result = _ProcessTracker(aspect, self, tick_time)
             return result
 
-    def is_aspect_work(self, aspect):
+    def is_aspect_work(self, aspect, timing_check=True):
         tick_time = self.redis.get(PREFIX_ALLOC(aspect))
-        if tick_time:
+        if tick_time and timing_check:
             time.sleep(int(tick_time))
             tick_time = self.redis.get(PREFIX_ALLOC(aspect))
 
