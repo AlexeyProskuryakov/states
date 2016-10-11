@@ -30,7 +30,7 @@ class _ProcessTracker(object):
 
 
 def _send_heart_beat(aspect, pd, tick_time, stop_event):
-    log.info("start tracking [%s]" % aspect)
+    log.info("start tracking [%s] every [%s]" % (aspect, tick_time))
 
     while not stop_event.isSet():
         try:
