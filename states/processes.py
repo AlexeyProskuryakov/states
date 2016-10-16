@@ -46,7 +46,7 @@ class ProcessDirector(object):
     def __init__(self, name="?", clear=False, max_connections=2):
         cm = ConfigManager()
         self.redis = redis.StrictRedis(host=cm.get('process_director_redis_address'),
-                                       port=cm.get('process_director_redis_port'),
+                                       port=int(cm.get('process_director_redis_port')),
                                        password=cm.get('process_director_redis_password'),
                                        db=0,
                                        max_connections=max_connections
