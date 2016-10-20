@@ -5,7 +5,7 @@ import redis
 import time
 from threading import Thread, Event
 
-from states import ConfigManager
+from rr_lib.cm import ConfigManager
 
 log = logging.getLogger("process_director")
 
@@ -56,10 +56,10 @@ class ProcessDirector(object):
 
         log.info("Process director [%s] inited." % name)
 
-    def start_aspect(self, aspect, tick_time=DEFAULT_TICK_TIME):
+    def start_aspect(self, aspect, tick_time=DEFAULT_TICK_TIME, with_tracker=True):
         alloc = self.redis.set(PREFIX_ALLOC(aspect), tick_time, ex=tick_time, nx=True)
 
-        if alloc:
+        if alloc and with_tracker:
             result = _ProcessTracker(aspect, self, tick_time)
             return result
 
