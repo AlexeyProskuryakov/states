@@ -1,0 +1,1 @@
+-e git://github.com/AlexeyProskuryakov/rr_lib.git#egg=rr_lib
